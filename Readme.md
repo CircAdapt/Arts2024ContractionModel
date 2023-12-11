@@ -1,12 +1,12 @@
-Arts2024ContractionModel
+#Arts2024ContractionModel
 <https://github.com/CircAdapt/Arts2024ContractionModel>
 
-Source code of the CircAdapt model of heart and circulation, in which is the mechanochemical-based contraction model is implemented, as described in the manuscript: ìTranslating myosin-binding protein C and titin abnormalities to whole-heart function using a novel calcium-contraction coupling modelî by Theo Arts1, PhD, Aurore Lyon1, PhD, Tammo Delhaas1, PhD, Diederik WD Kuster2, PhD, Jolanda van der Velden2, PhD, Joost Lumens1, PhD.
+Source code of the CircAdapt model of heart and circulation, in which is the mechanochemical-based contraction model is implemented, as described in the manuscript: ‚ÄúTranslating myosin-binding protein C and titin abnormalities to whole-heart function using a novel calcium-contraction coupling model‚Äù by Theo Arts1, PhD, Aurore Lyon1, PhD, Tammo Delhaas1, PhD, Diederik WD Kuster2, PhD, Jolanda van der Velden2, PhD, Joost Lumens1, PhD.
 1 Department of Biomedical Engineering, Cardiovascular Research Center Maastricht (CARIM), Maastricht University, 6200MD Maastricht, The Netherlands.
 2 Department of Physiology, Amsterdam University Medical Center, 1081HZ Amsterdam, The Netherlands.
 
 
-Code of the implementation of the new contraction model in CircAdapt
+#Code of the implementation of the new contraction model in CircAdapt
 
 The code is written in MATLAB (MathWorks, version R2023a). The model of calcium-contraction coupling is implemented by the files 'SarcSf.m' and 'SarcDot.m'. In 'SarcSf.m', the sarcomere is represented by a sarcomere length and a series elastic element. These data are used to calculate mechanical equilibria in the CircAdapt model of heart and circulation. In 'SarcDot.m' the time derivatives of the state variables unloaded sarcomere length P.Patch.Lsi (=Ls in Eq.1 of the manuscript) and amount of attached cross-bridges P.Patch.Xb (=SXbTot in Eq.10 of the manuscript).
 
@@ -19,7 +19,7 @@ Sarcomere length and normalized equilibrium calcium concentration are represente
 The sequence of 5 parameters in P.Patch follow the sequence: left atrium, right atrium, left ventricular free wall, septum and right ventricular free wall.
 
 
-Abstract of the related manuscript
+#Abstract of the related manuscript
 
 Mutations in cardiac myosin-binding protein C (cMyBP-C) or titin may respectively lead to hypertrophic (HCM) or dilated (DCM) cardiomyopathies. The mechanisms leading to these phenotypes remain unclear because of the challenge of translating cellular abnormalities to whole-heart and system function.
 We developed and validated a novel computer model of calcium-contraction coupling incorporating the role of cMyBP-C and titin based on the key assumptions: 1) tension in the thick filament promotes cross-bridge attachment mechanochemically, 2) with increasing titin tension, more myosin heads are unlocked for attachment, and 3) cMyBP-C suppresses cross-bridge attachment.
