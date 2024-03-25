@@ -59,4 +59,3 @@ P.ArtVen.pExt = DpAv;
 P.Bag.pExt    = DpBg;
 
 end
-

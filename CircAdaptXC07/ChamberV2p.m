@@ -1,10 +1,10 @@
 function ChamberV2p
 % function ChamberV2p
 % A chamber is a cavity encapsulated in a single myocardial wall.
-% Calculates: from Chamber volume V ->
-% myofiber stress Sf, wall tension T and cavity pressure p
+% Input: Chamber volume V
+% Output: myofiber stress Sf, wall tension T and cavity pressure p
 % using the linearized T(Am) relation
-% Theo Arts, Maastricht University, March 16, 2019
+% Theo Arts, Maastricht University, March 7, 2024
 
 global P;
 if P.Chamber.n==0 %if there is no chamber
@@ -16,7 +16,7 @@ Wall   = P.Wall   ; % Wall structure
 
 RhoB = P.General.RhoB;
 iWall= Chamber.iWall          ; % index of related wall
-V    = max(0, Chamber.V)      ; %cavity volumes
+V    = max(0, Chamber.V)      ; % cavity volumes
 VWall= Wall.VWall(iWall)      ; % wall volumes
 Aw0  = Wall.Aw0(:,iWall)      ; % zero tension midwall area
 DADT = Wall.DADT(:,iWall)     ; % wall compliance
@@ -55,4 +55,3 @@ P.Wall   = Wall;
 P.Chamber= Chamber;
 
 end
-

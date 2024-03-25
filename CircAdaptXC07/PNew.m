@@ -145,13 +145,11 @@ for iP=1:P.Patch.n
     end
 end
 % Ventricle=default
-Put({'Patch','Adapt'},'SfXbMaxT' ,'All' , 84000); % max active Sf
-Put({'Patch','Adapt'},'SfXbMaxT' ,PatchA, 36000); % max active Sf atria
-Put({'Patch','Adapt'},'SfXT'     ,'All' ,   840); % max Xb*Ecm Sf
-Put({'Patch','Adapt'},'SfXT'     ,PatchA,  6400); % max Xb*Ecm Sf atria
-Put({'Patch','Adapt'},'SfEcmMaxT','All' ,  2400); % ECM Sf at BE
-Put({'Patch','Adapt'},'SfEcmMaxT',PatchA, 25000); % ECM Sf at BE atria
-Put({'Patch','Adapt'},'hIsoT'    ,'All' ,  1.13); % ~(LSarc/2) at B.Ej.
+Put({'Patch','Adapt'},'XbMaxT' ,'All' ,    23); % max amount of Xb's
+Put({'Patch','Adapt'},'XbMaxT' ,PatchA,   5.4); % max amount of Xb's
+Put({'Patch','Adapt'},'SfXT'   ,'All' ,  2500); % max Xb*Ecm Sf
+Put({'Patch','Adapt'},'SfXT'   ,PatchA,  7300); % max Xb*Ecm Sf atria
+Put({'Patch','Adapt'},'hMeanT' ,'All' ,  1.02); % ~(LSarc/2) at B.Ej.
 end
 
 function SarcomereProperties
@@ -173,9 +171,9 @@ Put('Patch','SfP',{'La1','Ra1','Lv1','Sv1','Rv1'},[8 4 5 5 5]*1e2);
     % passive stress at reference
 
 % Sarcomere structure, h.. refers to half sarc length
-P.Patch.hAct = 1.050; % [um] thin filament length
+P.Patch.hAct = 1.040; % [um] thin filament length
 P.Patch.hMyo = 0.825; % [um] myosin length including bare zone
-P.Patch.hBare= 0.050; % [um] bare zone length
+P.Patch.hBare= 0.077; % [um] bare zone length
 P.Patch.fD   = 0.33 ; % Fraction D-zone
 P.Patch.LnbC =-1.30*[1 1 1 1 1]; % Fraction Ca sensitivity of C-zone
 P.Patch.gTit = 1.82*[1 1 1 1 1]; % Titin-Xb dissociation by strain
@@ -189,16 +187,16 @@ P.Patch.SfA  = 4500 *[1 1 1 1 1];% MechChem: scaling to number of Xb's
 % Ca Pulse
 P.Patch.TauCa  =[0.03*[1 1],0.18*[1 1 1]];
 Put('Patch','CaS'  ,'All',0.25); %Systolic Ca-injection
-Put('Patch','CaD'  ,'All',0.11); %Diastolic Ca-removal
-Put('Patch','YCaS' ,'All', 4500*[1 1 1 1 1]);
+Put('Patch','CaD'  ,'All',0.08); %Diastolic Ca-removal
+Put('Patch','YCaS' ,'All', 4600*[1 1 1 1 1]);
 Put('Patch','YCaD' ,'All', 1800*[1 1 1 1 1]);
 P.Patch.FacYCa= [1 1 1 1 1]; % controls systolic duration by YCaS and YCaD
 % rate dependency of Ca-pulse parameters
 P.Patch.aTauCa=  0.6; % duration systolic Ca-pulse
 P.Patch.aCaS  =  0.5; % systolic [Ca]-source
 P.Patch.aCaD  =  0.2; % diastolic [Ca]-source
-P.Patch.aYCaS = -1.8; % systolic pulse Ca conductivity
-P.Patch.aYCaD =  0.0; % diastolic background Ca conductivity
+P.Patch.aYCaS = -1.5; % systolic pulse Ca conductivity
+P.Patch.aYCaD =  0.2; % diastolic background Ca conductivity
 P.Patch.avMx  = -1.0; % vMx increases with heart rate
 
 end
@@ -750,4 +748,3 @@ for i=1:length(FieldsP)
 end
 
 end
-

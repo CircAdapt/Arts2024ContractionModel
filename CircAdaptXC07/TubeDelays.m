@@ -112,4 +112,3 @@ jt      = it+nt*(0:nc-1)+1; % single column index
 f       = interp1(F(:),jt(:)); % single column interpolation
 f= reshape(f,[nd,nc]); % reshaping to match size t-matrix and output
 end
-

@@ -4,7 +4,7 @@ function AdaptExc
 % Standard beat to beat (absence of) adaptation
 % Blood pressure is controlled by change of circulating volume
 % followed by specific exercise adaptation
-% Theo Arts, Maastricht University, Nov 12, 2017
+% Theo Arts, Maastricht University, Mar 5, 2024
 
 global P
 
@@ -27,17 +27,17 @@ function AdaptE
 %=== Begin adapt special
 %=== Actions of adaptation at excercise
 %=== Adapt ArtVen wall thickness and Patches
-ArtVenAdapt('All','All');
-TubeAdapt('All','All');
-PatchAdapt('All','All');
-BagAdapt;
+AdaptArtVen('All','All');
+AdaptTube('All','All');
+AdaptPatch('All','All');
+AdaptBag;
 %=== end actions of adaptation
 
 end
 
 %==== Specific adaptation functions ==========================
 
-function BagAdapt %  Bag adaptation to pAdapt reference
+function AdaptBag %  Bag adaptation to pAdapt reference
 global P
 if P.Bag.n==0; return; end
 pMax      = max(P.Bag.pTrans);
@@ -47,4 +47,3 @@ disp(['Bag Adaptation ',[P.Bag.Name{:}],'                x1000: ',...
     num2str(1000*log(Fac_pMax),'%7.0f')]);
 
 end
-

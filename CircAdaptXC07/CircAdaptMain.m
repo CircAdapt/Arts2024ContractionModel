@@ -111,4 +111,3 @@ disp('Simulation finished successfully');
 CircDisplay; % graphical display
 % Structure P has been extended with solution for all variables as a
 % function of time
-

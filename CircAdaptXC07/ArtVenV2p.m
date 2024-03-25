@@ -1,10 +1,11 @@
 function ArtVenV2p
 %function ArtVenV2p
-% Art/Ven hemodynamics of an organ or group of organs with peripheral
-% resistance in between
+% Art/Ven hemodynamics of an organ or group of organs with arterial inlet
+% and venous outlet with a microcirculatory peripheral resistance in
+% between.
 % volume V-> transmural pressure pTrans(V)
 % wave impedance Z(V) and estimate of cross-sectional area A(V)
-% Theo Arts, Maastricht University, April 20, 2023
+% Theo Arts, Maastricht University, March 7, 2024
 
 global P;
 
@@ -27,7 +28,7 @@ Ve   = Ar+1;
 ArVe = [Ar,Ve]; % convert A0 and p0 to row vectors
 A0Row= A0(ArVe) ; % working cross-section
 AwRow= Aw(ArVe) ; % wall cross-section
-p0Row= p0(ArVe) ; % pressure at crossection A0
+p0Row= p0(ArVe) ; % pressure at cross-section A0
 kRow = k(ArVe)  ; % wall stiffness
 AAr  = VAr./Len ; % actual arterial cross-section
 AVe  = VVe./Len ; % actual venous cross-section
@@ -62,15 +63,12 @@ FAr= VAr./(Len.*A0(Ar)); % Ar Volume factor
 FVe= VVe./(Len.*A0(Ve)); % Ve Volume factor
 qAv= Dp.*FAr.*FVe.*(q0Av./p0Av); % Flow ~ Volume^2 (Poiseuille)
 
-ArtVen.q       = qAv     ; % microculatory flow
-ArtVen.pTransAr= pTransAr; % transmural pressure prox/Ar compartment
-ArtVen.pTransVe= pTransVe; % transmural pressure dist/Ve compartment
-ArtVen.ZAr     = ZAr     ; % prox/Ar input wave impedance
-ArtVen.ZVe     = ZVe     ; % dist/Ve output wave impedance
-ArtVen.AAr     = A(:,RgA); % prox/Ar cross-sectional area
-ArtVen.AVe     = A(:,RgV); % dist/Ve cross-sectional area
-
-P.ArtVen=ArtVen;
+P.ArtVen.q       = qAv     ; % microculatory flow
+P.ArtVen.pTransAr= pTransAr; % transmural pressure prox/Ar compartment
+P.ArtVen.pTransVe= pTransVe; % transmural pressure dist/Ve compartment
+P.ArtVen.ZAr     = ZAr     ; % prox/Ar input wave impedance
+P.ArtVen.ZVe     = ZVe     ; % dist/Ve output wave impedance
+P.ArtVen.AAr     = A(:,RgA); % prox/Ar cross-sectional area
+P.ArtVen.AVe     = A(:,RgV); % dist/Ve cross-sectional area
 
 end
-

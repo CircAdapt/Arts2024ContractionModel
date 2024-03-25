@@ -1,7 +1,7 @@
 function TimingInit
 % function TimingInit
 % Sets patch depolarization times for upcoming beat
-% Theo Arts, Maastricht University, Oct 24, 2018
+% Theo Arts, Maastricht University, March 9, 2024
 
 global P
 

@@ -3,7 +3,7 @@ function TubeV2p
 % Tube volume V -> transmural pressure pTrans, wave propagation velocity
 % c0, proximal and distal zero-flow pressure pSProx, pSDist and source
 % impedances ZR (prox), ZL (dist), using delayed pressures.
-% Theo Arts, Maastricht University, Nov 19, 2021
+% Theo Arts, Maastricht University, March 11, 2024
 
 global P
 
@@ -23,8 +23,7 @@ EtaB  = P.General.EtaB ; %blood viscosity
 A     = P.Tube.V./Len; % vessel cross-section
 hRPois= 4*pi*EtaB*Len./A.^2; % half Poiseuille resistance
 m     = k/3-1; % cross-sectional stiffnes parameter
-a     = (A0./Aw).^0.3; % low a-value counteracts vessel collapse
-% Thick wall (=low a) counteracts vessel collapse
+a     = (A0./Aw).^0.3; % a thick wall (small a) counteracts vessel collapse
 am    = a.*m;
 ARef  = A0./am; % reference A, A=ARef for p=0;
 fa    = am.^m;
@@ -66,4 +65,3 @@ P.Tube.Att    = Att    ; %Womersley attenuation factor
 P.Tube.A      = A      ; %Cross-sectional area
 P.Tube.pTrans = pTrans ; %Transmural pressure
 end
-

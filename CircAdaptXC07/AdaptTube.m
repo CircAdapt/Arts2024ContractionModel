@@ -1,4 +1,4 @@
-function TubeAdapt(StrTube,AdaptType)
+function AdaptTube(StrTube,AdaptType)
 % function TubeAdapt(StrTube,AdaptType);
 % Adaptation of Diameter and Wall thickness of Tube to
 % pressure and flow.

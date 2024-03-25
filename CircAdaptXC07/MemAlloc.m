@@ -46,4 +46,3 @@ if ExecuteMemAlloc
     P.TriSeg.pTransR= MatTriSeg; % RV transmural pressure
 end
 end
-

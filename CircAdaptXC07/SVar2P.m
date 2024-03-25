@@ -33,4 +33,3 @@ P.Patch.Xb  =              P.SVar(:,iB(i):iE(i))  ; i=i+1;
 P.Patch.Lsi =              P.SVar(:,iB(i):iE(i))  ; i=i+1;
 
 end
-

@@ -29,4 +29,3 @@ P2SVarDot   ; % transfer of derivatives to P-structure
 
 OutDotT= real(P.SVarDot)'; % odeXX requires OutDotT to be a column vector
 end
-

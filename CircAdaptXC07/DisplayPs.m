@@ -24,4 +24,3 @@ figure(4); plot(V,p(:,1:4))
 figure(5); plot(t,q)
 np=size(Sarc,2)/2;
 figure(6); plot(Sarc(:,1:np),Sarc(:,np+(1:np)));
-

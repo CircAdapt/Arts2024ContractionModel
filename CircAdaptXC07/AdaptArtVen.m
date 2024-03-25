@@ -1,10 +1,10 @@
-function ArtVenAdapt(StrAv,AdaptType)
+function AdaptArtVen(StrAv,AdaptType)
 % function ArtVenAdapt(StrAv,AdaptType);
 % Adaptation of Diameter and Wall thickness of Art and Ven to
 % pressure and flow.
 % StrAv= cell array of ArtVen names, e.g. {'Br','Pu'}
 % AdaptType= {'Diameter', 'WallVolume'} indicates type of adaptation
-% Theo Arts, Maastricht University, Jun 1, 2018
+% Theo Arts, Maastricht University, March 12, 2024
 
 global P
 

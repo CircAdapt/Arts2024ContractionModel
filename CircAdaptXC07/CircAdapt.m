@@ -44,4 +44,3 @@ while 0<P.General.tEnd % new beat
     P.General.tEnd= P.General.tEnd-P.t(end); % remaining simulation time    
 end
 end
-

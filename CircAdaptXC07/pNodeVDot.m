@@ -1,9 +1,11 @@
 function pNodeVDot
 % function pNodeVDot
-% Pressures in cavities p -> pressure in Nodes: p
-%                         -> flows to cavities: VDot
+% Input: Source pressures and impedances of the outlets of the elements
+% ArtVen, Chamber, TriSeg, Tube, and Valve
+% The elements are connected to the nodes
+% Output: pressures in Nodes and flows from nodes to elements
 % Includes collapsibility of tubes
-% Theo Arts, Maastricht University, June 20, 2018
+% Theo Arts, Maastricht University, March 7, 2024
 
 global P
 
@@ -199,4 +201,3 @@ PN = pN-pE; % subtract external pressure
 dp = (PS>PN).*max(0,-PS./((PS>0).*(YN./YS-2+eps)+1)-PN);
 % Waterfall pressure gradient
 end
-

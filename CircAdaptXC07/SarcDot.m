@@ -7,7 +7,7 @@ function SarcDot
 % calculated, using the value of L
 % The sarcomere is embedded in Patch
 % The contractile mechanism is based on the myosin-MechChem-C/D model
-% Theo Arts, Maastricht University, Jun 21, 2022
+% Theo Arts, Maastricht University, March 9, 2024
 
 global P
 
@@ -27,15 +27,15 @@ vMx = Sarc.vMx .* TC.^Sarc.avMx ; % 0.5*dLs/dt unloaded sarcomere
 hSe = Sarc.hSe ; % [um] half sarc length series elasticity
 
 % Ca Pulse
-TauCa= Sarc.TauCa.* TC.^Sarc.aTauCa; % duration systolic Ca-pulse
-CaS  = Sarc.CaS  .* TC.^Sarc.aCaS  ; % systolic [Ca]-source
-CaD  = Sarc.CaD  .* TC.^Sarc.aCaD  ; % diastolic [Ca]-source
-YCaS = Sarc.YCaS .* TC.^Sarc.aYCaS ; % systolic pulse Ca conductivity
-YCaD = Sarc.YCaD .* TC.^Sarc.aYCaD ; % diastolic background Ca conductivity
-Ef   = Sarc.Ef    ; % sarcomere strain
-Lsi  = Sarc.Lsi   ; % SVar: unloaded sarcomere length
-Xb   = Sarc.Xb    ; % [-] ~ number of Xb's
-Sf0  = Sarc.Sf    ; % stress with zero SE-length
+TauCa = Sarc.TauCa.* TC.^Sarc.aTauCa; % duration systolic Ca-pulse
+CaS   = Sarc.CaS  .* TC.^(Sarc.aCaS)  ; % systolic [Ca]-source
+CaD   = Sarc.CaD  .* TC.^(Sarc.aCaD)  ; % diastolic [Ca]-source
+YCaS  = Sarc.YCaS .* TC.^Sarc.aYCaS ; % systolic pulse Ca conductivity
+YCaD  = Sarc.YCaD .* TC.^Sarc.aYCaD ; % diastolic Ca conductivity
+Ef    = Sarc.Ef    ; % sarcomere strain
+Lsi   = Sarc.Lsi   ; % SVar: unloaded sarcomere length
+Xb    = Sarc.Xb    ; % [-] ~ number of Xb's
+Sf0   = Sarc.Sf    ; % stress with zero SE-length
 DSfDEf= Sarc.DSfDEf; % total stiffness
 
 % tc: time after moment of depolarization of the sarcomere
@@ -65,7 +65,7 @@ qD   = (CaD-Ca).*YCaD;
 qS   = (CaS-Ca).*YCaSt;
 qCa  = qD+qS; % 'raw' XbDot
 
-% Extra Ca binding at low [Ca] to Tn, while Xb formation remains low
+% Extra Ca binding to Tn at low [Ca], while Xb formation is low
 qCa=qCa./(exp(-0.5*Xb)+20*exp(-20*Xb)+1);% correction&safety for low Xb
 
 % Stiff ODE correction by soft limitation of XbDot
@@ -77,13 +77,11 @@ XbDot= s+sqrt(v.^2+0.01);
 hDot = (L-1).*vMx;
 
 %=== Stress/Ls and stiffness, collected for output
-Sarc.LsiDot= 2*hDot; % h=half sarc length
-Sarc.XbDot = XbDot;
-Sarc.Ls    = 2*hS;
-Sarc.Sf    = Sf;
-Sarc.Ca    = Ca;
-
-P.Patch    = Sarc;
+P.Patch.LsiDot= 2*hDot; % h=half sarc length
+P.Patch.XbDot = XbDot;
+P.Patch.Ls    = 2*hS;
+P.Patch.Sf    = Sf;
+P.Patch.Ca    = Ca;
 
 end
 
@@ -118,14 +116,17 @@ HC  = hC.*GTit; % Normalized C-zone length
 ST= min(ST,HC+HD-1); %tension MUST be less than 100% activation
 s1= ST;
 s4= X2S(S2X(X2S(S2X(s1)-HC)-LnbC)-HD);
-Err0= ST-s1+s4-LnbC; % LnbC causes overlap of C- and D-zone conditions
+Err0= ST-s1+s4+LnbC; % LnbC causes overlap of C- and D-zone conditions
 s10 = s1;
 s1  = ST+s4;
 for i=1:2 % 2 iterations are sufficient
     s4=X2S(S2X(X2S(S2X(s1)-HC)-LnbC)-HD);
-    Err=ST-s1+s4-LnbC;
+    s2=X2S(S2X(s1)-HC);
+    s3=s2-LnbC;
+    s4=X2S(S2X(s3)-HD);
+    Err=ST-s1+s4+LnbC;% improved/corrected Y324
     dE=Err0-Err;
-    eps=1e-5; % avoids zero division near iteration target
+    eps=1e-5; % avoids zero division near iteration target+++++
     N=dE.^2+2*eps;
     w0=(eps+Err0.*dE)./N;
     w1=(eps-Err .*dE)./N;
@@ -147,7 +148,7 @@ zHi= x+1+exp(-x);
 N  = sqrt((zHi-zLo).^2+2.0);
 V  = (tanh(0.83*(x+1))+1)/2 ;
 z=N.*V+zLo;
-for i=1:2 % 2 iteration for high accuracy
+for i=1:5 % 2 iteration for high accuracy
     [xz,dxdz]=S2X(z);
     dx=x-xz;
     dz=-dx./dxdz;
@@ -162,4 +163,3 @@ Q=1+P+sqrt((P.*(P+2)));
 x=-Q-log(P.*Q);
 dxdz=Q;
 end
-

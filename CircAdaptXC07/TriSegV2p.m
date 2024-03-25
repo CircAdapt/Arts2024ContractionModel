@@ -1,16 +1,13 @@
 function TriSegV2p
 % function TriSegV2p
 % TriSeg is a 3-wall structure (Left,Septal,Right) with 2 cavities (R,L)
-% Given the state variables cavity volumes VL and VR -> 
-% Calculates: dimensions of the 'double bubble'
-% myofiber stress Sf, wall tension Tm and cavity pressures pTrans
-% Quantities V and Y are solved from given VL and VR
+% Input: state variables cavity volumes VL and VR
+% Output: dimensions of the TriSeg configuration and walls
 % V = septal cap volume
 % Y = junction radius.
 % State variables P.TriSeg V and Y represent initial estimates of
-% VS and YS. Only 1 or 2 iterations have been applied.
-% Theo Arts, Maastricht University, nov 17, 2022
-% (last correction: factor pi in dV, line 163)
+% VS and YS. Then, only 1 or 2 iterations have been applied.
+% Theo Arts, Maastricht University, March 6, 2024
 
 global P;
 if P.TriSeg.n==0 %if there is no TriSeg
@@ -24,20 +21,20 @@ RhoB   = P.General.RhoB; % blood density
 VLT    = TriSeg.VL     ; % left cavity volume
 VRT    = TriSeg.VR     ; % right cavity volume
 n      = TriSeg.n      ; % number of TriSeg's
-iWall  = TriSeg.iWall  ; %related walls
+iWall  = TriSeg.iWall  ; % related walls
 VT     = TriSeg.V      ; % init septal cap volume, to be solved
 YT     = TriSeg.Y      ; % init radius junction circle, to be solved
-Aw0W   = Wall.Aw0      ; %zero stress wall area
-DADTW  = Wall.DADT     ; % wall compliance
-VWallW = Wall.VWall    ; % 3 wall volumes
+Aw0W   = Wall.Aw0      ; % zero stress wall area
+DADTW  = Wall.DADT     ; % wall compliances
+VWallW = Wall.VWall    ; % wall volumes
 
 for iTr=1:n %for all TriSeg's
-    iW   = iWall(:,iTr)  +(0:2); % 3 walls
+    iW   = iWall(:,iTr)  +(0:2); % 3 walls of TriSeg
     Aw0  = Aw0W(:,iW) ;      % zero stress wall area
     DADT = DADTW(:,iW);      % wall compliance
-    VWall= VWallW(iW) ;      % 3 wall volumes
-    VWL  = mean(VWall(1:2)); % enclosed wall volume LV cavity
-    VWR  = mean(VWall(2:3)); % enclosed wall volume RV cavity
+    VWall= VWallW(iW) ;      % 3 wall volumes [L,S,R]
+    VWL  = VWall(1:2)*[0.5;0.5]; % enclosed wall volume LV cavity
+    VWR  = VWall(2:3)*[0.5;0.5]; % enclosed wall volume RV cavity
     VL   = VLT(:,iTr)+VWL; % midwall enclosed LV-volume
     VR   = VRT(:,iTr)+VWR; % midwall enclosed RV-volume
     VS   = VT(:,iTr); % septal rightward volume shift
@@ -46,11 +43,11 @@ for iTr=1:n %for all TriSeg's
     VS0=VS; % storage of initial value septal cap volume
     YS0=YS; % storage of initial value junction radius
     
-    % Calculation iteration VS and YS increment for better equilibrium 
-    for j=1:1 % 1-2 iterations appear to be sufficient
+    % Iteration VS and YS for minimum energy 
+    for j=1:1 % 1 or 2 iterations appear to be sufficient
         [dVS,dYS]= DvDp(VS,YS,VL,VR,Aw0,DADT);
         VS= VS+dVS; % Improved estimate of TriSeg geometry
-        YS= YS+dYS; % only one iteration has been applied
+        YS= YS+dYS;
     end
     
     % Limitation of time-derivatives to min and max value
@@ -69,11 +66,11 @@ for iTr=1:n %for all TriSeg's
     VS = max(VLo,min(VHi,VS));
        
     % final TriSeg geometry requires some recalculations
-    VM   = [VS-VL,VS,VS+VR]; %1st estimate cap-volumes
+    VM   = [VS-VL,VS,VS+VR]; % 1st estimate cap-volumes
     ARef = pi*YS.^2        ; % normalization reference area
     V    = VM./(ARef.*YS)  ; % normalized capvolumes
     A0   = Aw0./ARef       ; % normalized zero stress area
-    dTdA = ARef./DADT      ; % area normalized wall stiffness
+    dAdT = DADT./ARef      ; % normalized wall area compliance
     % Auxilary normalized variables
     X    = VdPi2X(V); % normalized cap-height
     XX   = X.^2;
@@ -81,12 +78,12 @@ for iTr=1:n %for all TriSeg's
     C    = 2*X./RR; % normalized wall curvature
     
     % Revert normalization
-    T     = max(0,(RR-A0).*dTdA);% [N/m] wall tension
+    T     = max(0,(RR-A0)./dAdT);% [N/m] wall tension
     Aw    = ARef.*RR; % wall area
     Cm    = C./YS; % wall curvature
     pTrans= 2*Cm.*T; % transmural pressure with effect of buckling
     
-    % Cavity wave impedance properties, needed to make node connection
+    % Cavity wave impedance properties, needed for node connections
     Vm   = [VL+VWL,VR+VWR];
     Len  = 2*Vm.^(1/3); % cavity length
     A    = Vm ./ Len; % cross-sectional area
@@ -123,15 +120,15 @@ P.Wall  = Wall;
 P.TriSeg= TriSeg;
 end
 
-%=== Additional function ============ 
+%=== Additional functions ============ 
 function [dV,dY]=DvDp(VS,YS,VL,VR,Aw0,DADT)
 % input: VS=septal cap volume, YS= junction radius
 % [VL, VR]= [left,right] midwall enclosed volumes
 % Aw0,DADT= [zero load wall area, compliance wall] for L- S- R- walls
 VM   = [VS-VL,VS,VS+VR]; % cap volumes LSR
 ARef = pi*YS.^2; % reference area for normalization
-V    = VM./(ARef.*YS); %normalized cap volumes
-A0   = Aw0./ARef     ; %normalized wall areas
+V    = VM./(ARef.*YS); % normalized cap volumes
+A0   = Aw0./ARef     ; % normalized wall areas
 dTdA = ARef./DADT    ; % normalized wall compliance
 
 X    = VdPi2X(V); % solves 3rd order polynomial analytically

@@ -51,4 +51,3 @@ plot(t,M);
 axis([min(t),max(t),min(M(:)),max(M(:))])
 legend(P.ArtVen.Name)
 title('Arterial Flow Velocity into Periphery')
-

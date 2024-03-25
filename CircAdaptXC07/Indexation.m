@@ -6,20 +6,20 @@ function Indexation
 % Connections between elements are defined by strings stored in
 % structure field P.Map
 %
-% The P-Structure is built on the information in P.Map
+% The skeleton of the P-Structure is built on the information in P.Map
 % ArtVen represents artery-peripheral resistance-vein of organ or body part
 % Chamber represents a cavity enclosed by a myocardial wall (atria)
 % TriSeg represents combination of two cavities with three walls
 % Bag represents passive elastic bag, encapsulating part of the
 % circulation, like the pericardium
-% Node: named connection point
+% Node: named connection point in the circulatory network
 % Wall: contractile muscular wall, composed of 1 or more patches
 % Patch: contractile part of a wall, having specific mechanical properties
 % Valve: valve with inertia connects proximal to distal node, may leak
 % Tube: elastic tube connects proximal to distal node
-% DepPath: depolarization pathway between patches, acting as nodes
+% DepPath: depolarization pathway between patches as nodes of conduction
 %
-% Theo Arts, Maastricht University, Nov 27, 2021
+% Theo Arts, Maastricht University, March 9, 2024
 
 global P;
 Map= P.Map; % contains complete information about element composition 
@@ -298,4 +298,3 @@ end
 P.Patch.iDepPathProx= Aux; % Patch -> beginning of new DepPath
 
 end
-

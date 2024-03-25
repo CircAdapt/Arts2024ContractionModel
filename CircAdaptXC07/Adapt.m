@@ -23,7 +23,6 @@ qRef   = P.ArtVen.qRef;% ArtVen flow at rest
 q0Av   = P.ArtVen.q0Av;
 p0Av   = P.ArtVen.p0Av;
 kExc   = P.ArtVen.kExc;% coefficient to accomodate flow to exercise
-% kAv    = P.ArtVen.kAv;
 
 % Finding systemic and pulmonary ArtVen's
 jPu=contains(lower(Name),'pu');%Pulm. names contain 'pu'
